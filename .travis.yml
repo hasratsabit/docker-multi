@@ -1,0 +1,21 @@
+sudo: required
+services:
+  - docker
+before_install:
+  - docker build -t hasratsabit/react-test -f ./client/Dockerfile.dev ./client
+script:
+  - docker run -e CI=true hasratsabit/react-test npm test
+
+after_success:
+  - docker build -t hasratsabit/multi-client ./client
+  - docker build -t hasratsabit/multi-nginx ./nginx
+  - docker build -t hasratsabit/multi-server ./server
+  - docker build -t hasratsabit/multi-worker ./worker
+
+# Login to docker
+  - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_ID" --password-stdin
+# Push images to docker hub
+  - docker push hasratsabit/multi-client
+  - docker push hasratsabit/multi-nginx
+  - docker push hasratsabit/multi-server
+  - docker push hasratsabit/multi-worker
