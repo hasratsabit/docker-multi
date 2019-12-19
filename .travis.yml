@@ -14,7 +14,7 @@ after_success:
 
 # Login to docker
   - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_ID" --password-stdin
-# Push images to docker hub
+# Push images to docker hub. Please push client
   - docker push hasratsabit/multi-client
   - docker push hasratsabit/multi-nginx
   - docker push hasratsabit/multi-server
